@@ -24,6 +24,33 @@ from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
+from flask import Flask
+import threading
+import os
+
+app = Flask(__name__)
+
+@app.route("/")
+def health():
+    return "OK", 200
+
+def start_keepalive_server():
+    """
+    Render'ın port scan health check’ini geçmek için
+    arka planda küçük bir Flask sunucusu çalıştırır.
+    """
+    port = int(os.environ.get("PORT", "10000"))
+
+    def _run():
+        app.run(
+            host="0.0.0.0",
+            port=port,
+            debug=False,
+            use_reloader=False
+        )
+
+    thread = threading.Thread(target=_run, daemon=True)
+    thread.start()
 
 try:  # Prefer stdlib zoneinfo (Py 3.9+)
     from zoneinfo import ZoneInfo
@@ -429,6 +456,10 @@ def main() -> None:
 
     logging.info("Çalışma dizini: %s", Path.cwd().resolve())
 
+    # 🔹 Render health check için küçük Flask sunucusunu başlat
+    logging.info("Flask keep-alive server başlatılıyor...")
+    start_keepalive_server()
+
     token, chat_id = load_env()
     application = (
         Application.builder()
@@ -451,6 +482,7 @@ def main() -> None:
         scheduler: AsyncIOScheduler | None = application.bot_data.get("scheduler")  # type: ignore
         if scheduler:
             scheduler.shutdown(wait=False)
+
 
 
 if __name__ == "__main__":
