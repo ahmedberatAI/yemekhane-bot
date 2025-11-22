@@ -1,4 +1,4 @@
-# pip install python-telegram-bot pandas apscheduler python-dotenv Flask
+# pip install python-telegram-bot pandas apscheduler python-dotenv
 """
 Telegram bot that sends Ankara KYK ve Ankara Üniversitesi yemek menülerini CSV'lerden okur
 ve günlük olarak Telegram'a yollar. Tek dosya olarak tasarlandı; dilersen dosyayı `bot.py`
@@ -8,9 +8,10 @@ adıyla çalıştırabilirsin.
 from __future__ import annotations
 
 import asyncio
+import calendar
 import logging
 import os
-import threading  # <-- YENİ
+import unicodedata
 from datetime import date, datetime, timedelta
 from functools import partial
 from pathlib import Path
@@ -24,15 +25,22 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-# YENİ: Flask keep-alive için
-from flask import Flask
-
 try:  # Prefer stdlib zoneinfo (Py 3.9+)
     from zoneinfo import ZoneInfo
 except ImportError:  # pragma: no cover - fallback for older envs
     from pytz import timezone as ZoneInfo  # type: ignore
 
 IST = ZoneInfo("Europe/Istanbul")
+
+GENERIC_KEYWORDS = {
+    "corba",
+    "pilav",
+    "yemek",
+    "salata",
+    "tatli",
+    "ana yemek",
+    "kofte",
+}
 
 DATASETS = [
     {
@@ -51,27 +59,6 @@ DATASETS = [
 
 OGUN_ORDER = {"kahvalti": 0, "ogle": 1, "öğle": 1, "aksam": 2, "akşam": 2}
 DAY_NAMES_TR = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
-
-
-# -----------------------------
-# FLASK KEEP-ALIVE SUNUCUSU
-# -----------------------------
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return "Bot Çalışıyor ✔️"
-
-def run_flask():
-    # Render genelde PORT env veriyor, yoksa 3000
-    port = int(os.getenv("PORT", 3000))
-    # 0.0.0.0: dış dünyadan erişilebilir olsun (Render için şart)
-    app.run(host="0.0.0.0", port=port)
-
-def start_flask_server():
-    t = threading.Thread(target=run_flask, daemon=True)
-    t.start()
-    logging.info("Flask keep-alive server başlatıldı.")
 
 
 def load_env() -> Tuple[str, str]:
@@ -230,6 +217,69 @@ def build_message(target_date: date) -> str:
     return f"{header}\n\n" + "\n\n".join(blocks)
 
 
+def parse_user_date_arg(raw_date: str) -> Optional[date]:
+    cleaned = (raw_date or "").strip()
+    if not cleaned:
+        return None
+    try:
+        parsed = datetime.strptime(cleaned, "%d/%m/%Y").replace(tzinfo=IST)
+    except Exception:
+        return None
+    return parsed.date()
+
+
+def normalize_text_for_search(value: str) -> str:
+    transliterated = (
+        unicodedata.normalize("NFKD", (value or "").lower())
+        .replace("ç", "c")
+        .replace("ğ", "g")
+        .replace("ı", "i")
+        .replace("ö", "o")
+        .replace("ş", "s")
+        .replace("ü", "u")
+        .replace("â", "a")
+        .replace("î", "i")
+        .replace("û", "u")
+    )
+    return transliterated.strip()
+
+
+def is_generic_query(query: str) -> bool:
+    normalized = normalize_text_for_search(query)
+    return normalized in GENERIC_KEYWORDS
+
+
+def month_bounds(now: datetime) -> Tuple[date, date]:
+    first_day = date(now.year, now.month, 1)
+    last_day = date(now.year, now.month, calendar.monthrange(now.year, now.month)[1])
+    return first_day, last_day
+
+
+def search_meals_by_query(
+    normalized_query: str, sources: Dict[str, pd.DataFrame], now: datetime
+) -> Dict[str, list[Tuple[date, str, str]]]:
+    start, end = month_bounds(now)
+    results: Dict[str, list[Tuple[date, str, str]]] = {}
+
+    for name, df in sources.items():
+        month_df = df[(df["tarih"] >= start) & (df["tarih"] <= end)]
+        matches: list[Tuple[date, str, str]] = []
+        for _, row in month_df.iterrows():
+            yemekler_text = normalize_text_for_search(str(row.get("yemekler", "")))
+            if normalized_query in yemekler_text:
+                target_date = row.get("tarih")
+                if not isinstance(target_date, date):
+                    continue
+                ogun_value = str(row.get("ogun", "")).strip()
+                day_name = resolve_day_name(target_date, str(row.get("gun", "")))
+                matches.append((target_date, day_name, ogun_value))
+
+        matches.sort(key=lambda item: (item[0], OGUN_ORDER.get(normalize_ogun(item[2]), 99), item[2]))
+        if matches:
+            results[name] = matches
+    return results
+
+
 async def send_menu(application: Application, chat_id: str, target_date: date) -> None:
     try:
         message = build_message(target_date)
@@ -265,6 +315,63 @@ async def cmd_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await send_menu(context.application, str(update.effective_chat.id), target)
 
 
+async def cmd_tarih(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not update.message or not update.effective_chat:
+        return
+
+    date_arg = " ".join(context.args) if context.args else ""
+    target_date = parse_user_date_arg(date_arg)
+    if not target_date:
+        await update.message.reply_text("Lütfen tarihi GG/AA/YYYY biçiminde gir: Örneğin /tarih 02/11/2025")
+        return
+
+    await send_menu(context.application, str(update.effective_chat.id), target_date)
+
+
+async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not update.message:
+        return
+
+    if not context.args:
+        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
+        return
+
+    raw_query = " ".join(context.args).strip()
+    if not raw_query:
+        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
+        return
+
+    if is_generic_query(raw_query):
+        await update.message.reply_text(
+            "Lütfen daha spesifik bir yemek adı girin. Örneğin: Trileçe, Et Döner, Hamburger gibi."
+        )
+        return
+
+    normalized_query = normalize_text_for_search(raw_query)
+    now = datetime.now(IST)
+    sources = load_sources()
+    if not sources:
+        await update.message.reply_text("Hi�� veri yǬklenemedi; CSV dosyalar��n�� kontrol edin.")
+        return
+
+    matches = search_meals_by_query(normalized_query, sources, now)
+    if not any(matches.values()):
+        await update.message.reply_text(f'"{raw_query}" bu ayın menülerinde bulunamadı.')
+        return
+
+    lines = [f'"{raw_query}" için sonuçlar:']
+    dataset_order = [cfg["name"] for cfg in DATASETS]
+    for dataset_name in dataset_order:
+        entries = matches.get(dataset_name)
+        if not entries:
+            continue
+        lines.append(f"{dataset_name}:")
+        for target_date, day_name, ogun_value in entries:
+            lines.append(f"- {target_date:%Y-%m-%d} ({day_name}) - {ogun_value}")
+
+    await update.message.reply_text("\n".join(lines))
+
+
 async def configure_scheduler(application: Application, chat_id: str) -> None:
     scheduler = AsyncIOScheduler(timezone=IST, event_loop=asyncio.get_running_loop())
 
@@ -294,10 +401,6 @@ def main() -> None:
 
     logging.info("Çalışma dizini: %s", Path.cwd().resolve())
 
-    # 1) Flask keep-alive server'ı başlat
-    start_flask_server()
-
-    # 2) Telegram + scheduler kur
     token, chat_id = load_env()
     application = (
         Application.builder()
@@ -310,6 +413,8 @@ def main() -> None:
     application.add_handler(CommandHandler("bugun", cmd_bugun))
     application.add_handler(CommandHandler("yarin", cmd_yarin))
     application.add_handler(CommandHandler("menu", cmd_menu))
+    application.add_handler(CommandHandler("tarih", cmd_tarih))
+    application.add_handler(CommandHandler("ara", cmd_ara))
 
     try:
         application.run_polling(allowed_updates=Update.ALL_TYPES)
