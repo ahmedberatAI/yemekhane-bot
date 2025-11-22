@@ -293,11 +293,24 @@ async def send_menu(application: Application, chat_id: str, target_date: date) -
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     today = datetime.now(IST).date()
     lines = [
-        "Merhaba! /menu veya /bugun ile bugünün menüsünü, /yarin ile yarının menüsünü alabilirsin.",
-        "Günlük otomatik gönderim açık.",
-        f"Bugünün menüsünü istersen /bugun: {today:%Y-%m-%d}",
+        "Merhaba! Ben Ankara KYK ve Ankara Üniversitesi yemekhane botuyum. 🍽️",
+        "",
+        "📌 Kullanabileceğin komutlar:",
+        "• /bugun — Bugünün menüsünü gönderir.",
+        "• /yarin — Yarının menüsünü gönderir.",
+        "• /menu — Bugünün menüsü (kısayol).",
+        "• /tarih GG/AA/YYYY — Belirli bir tarih için menü (örn. /tarih 02/11/2025).",
+        "• /ara YEMEK_ADI — Bu ayki menülerde yemek ara (örn. /ara Trileçe).",
+        "",
+        "ℹ️ Günlük otomatik gönderim açık; her sabah 08:00 civarında menü gönderilir.",
+        f"📅 Bugün: {today:%Y-%m-%d}",
     ]
     await update.message.reply_text("\n".join(lines))
+
+
+async def cmd_help(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    # Yardım komutu, /start ile aynı metni gösteriyor
+    await cmd_start(update, context)
 
 
 async def cmd_bugun(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -322,7 +335,11 @@ async def cmd_tarih(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     date_arg = " ".join(context.args) if context.args else ""
     target_date = parse_user_date_arg(date_arg)
     if not target_date:
-        await update.message.reply_text("Lütfen tarihi GG/AA/YYYY biçiminde gir: Örneğin /tarih 02/11/2025")
+        await update.message.reply_text(
+            "Lütfen tarihi GG/AA/YYYY biçiminde gir.\n"
+            "Örnek: /tarih 02/11/2025\n\n"
+            "İpucu: Bugünün menüsü için /bugun, yarın için /yarin komutlarını kullanabilirsin."
+        )
         return
 
     await send_menu(context.application, str(update.effective_chat.id), target_date)
@@ -333,17 +350,25 @@ async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     if not context.args:
-        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
+        await update.message.reply_text(
+            "🔍 Belirli bir yemek aramak için:\n"
+            "Örnek: /ara Trileçe\n\n"
+            "Not: Arama şu an içinde bulunduğumuz ayın menülerinde yapılır."
+        )
         return
 
     raw_query = " ".join(context.args).strip()
     if not raw_query:
-        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
+        await update.message.reply_text(
+            "🔍 Belirli bir yemek aramak için:\n"
+            "Örnek: /ara Trileçe"
+        )
         return
 
     if is_generic_query(raw_query):
         await update.message.reply_text(
-            "Lütfen daha spesifik bir yemek adı girin. Örneğin: Trileçe, Et Döner, Hamburger gibi."
+            "Lütfen daha spesifik bir yemek adı girin.\n"
+            "Örnekler: Trileçe, Et Döner, Hamburger gibi."
         )
         return
 
@@ -351,12 +376,15 @@ async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     now = datetime.now(IST)
     sources = load_sources()
     if not sources:
-        await update.message.reply_text("Hi�� veri yǬklenemedi; CSV dosyalar��n�� kontrol edin.")
+        await update.message.reply_text("Hiç veri yüklenemedi; CSV dosyalarını kontrol edin.")
         return
 
     matches = search_meals_by_query(normalized_query, sources, now)
     if not any(matches.values()):
-        await update.message.reply_text(f'"{raw_query}" bu ayın menülerinde bulunamadı.')
+        await update.message.reply_text(
+            f'"{raw_query}" bu ayın menülerinde bulunamadı.\n'
+            "Tarih kısıtını değiştirmek istersen, ileride komutlara yeni parametreler eklenebilir. 🙂"
+        )
         return
 
     lines = [f'"{raw_query}" için sonuçlar:']
@@ -410,6 +438,7 @@ def main() -> None:
     )
 
     application.add_handler(CommandHandler("start", cmd_start))
+    application.add_handler(CommandHandler(["help", "yardim", "komutlar"], cmd_help))
     application.add_handler(CommandHandler("bugun", cmd_bugun))
     application.add_handler(CommandHandler("yarin", cmd_yarin))
     application.add_handler(CommandHandler("menu", cmd_menu))
