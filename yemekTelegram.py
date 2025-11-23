@@ -1,8 +1,7 @@
-# pip install python-telegram-bot pandas apscheduler python-dotenv Flask
+# -*- coding: utf-8 -*-
 """
-Telegram bot that sends Ankara KYK ve Ankara �oniversitesi yemek menǬlerini CSV'lerden okur
-ve gǬnlǬk olarak Telegram'a yollar. Tek dosya olarak tasarland��; dilersen dosyay�� `bot.py`
-ad��yla ��al��Yt��rabilirsin.
+Telegram bot that sends Ankara KYK ve Ankara Üniversitesi yemek menülerini CSV'lerden okur
+ve günlük olarak Telegram'a yollar.
 """
 
 from __future__ import annotations
@@ -11,7 +10,7 @@ import asyncio
 import calendar
 import logging
 import os
-import threading  # <-- YEN��
+import threading
 import unicodedata
 from datetime import date, datetime, timedelta
 from functools import partial
@@ -23,29 +22,24 @@ from apscheduler.jobstores.base import ConflictingIdError
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 from dotenv import load_dotenv
+from flask import Flask
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-# YEN��: Flask keep-alive i��in
-from flask import Flask
-
-try:  # Prefer stdlib zoneinfo (Py 3.9+)
+try:
     from zoneinfo import ZoneInfo
-except ImportError:  # pragma: no cover - fallback for older envs
+except ImportError:  # pragma: no cover
     from pytz import timezone as ZoneInfo  # type: ignore
 
 IST = ZoneInfo("Europe/Istanbul")
 
-GENERIC_KEYWORDS = {
-    "��orba",
+GENERIC_KEYWORDS: set[str] = {
     "corba",
     "pilav",
     "yemek",
     "salata",
-    "tatl��",
     "tatli",
     "ana yemek",
-    "k��fte",
     "kofte",
 }
 
@@ -55,7 +49,7 @@ DATASETS = [
         "paths": [Path("ankara_kyk_yemekleri.csv"), Path("kyk_aksam_yemekleri.csv")],
     },
     {
-        "name": "Ankara �oniversitesi",
+        "name": "Ankara Üniversitesi",
         "paths": [
             Path("ankara_universitesi_yemekleri.csv"),
             Path("ankara_universitesi_ogle_yemekleri.csv"),
@@ -64,8 +58,10 @@ DATASETS = [
     },
 ]
 
-OGUN_ORDER = {"kahvalti": 0, "ogle": 1, "��Yle": 1, "aksam": 2, "ak�Yam": 2}
-DAY_NAMES_TR = ["Pazartesi", "Sal��", "��ar�Yamba", "Per�Yembe", "Cuma", "Cumartesi", "Pazar"]
+# kahvalti/ogle/aksam -> sıralama
+OGUN_ORDER = {"kahvalti": 0, "ogle": 1, "aksam": 2}
+
+DAY_NAMES_TR = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"]
 
 
 # -----------------------------
@@ -76,33 +72,35 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Bot ��al��Y��yor �o"��?"
+    # Buraya botun canlı olduğunu gösteren basit bir metin yazıyoruz
+    return "Bot çalışıyor 🚀"
 
 
-def run_flask():
+def run_flask() -> None:
     # Render genelde PORT env veriyor, yoksa 3000
     port = int(os.getenv("PORT", 3000))
-    # 0.0.0.0: d��Y dǬnyadan eri�Yilebilir olsun (Render i��in �Yart)
     app.run(host="0.0.0.0", port=port)
 
 
-def start_flask_server():
+def start_flask_server() -> None:
     t = threading.Thread(target=run_flask, daemon=True)
     t.start()
-    logging.info("Flask keep-alive server ba�Ylat��ld��.")
+    logging.info("Flask keep-alive server başlatıldı.")
 
 
+# -----------------------------
+# ENV YÜKLEME
+# -----------------------------
 def load_env() -> Tuple[str, str]:
     """
-    .env dosyas��n�� script ile ayn�� klas��rden otomatik yǬkler, eksikleri do�Yrular.
-    - �-nce script klas��rǬndeki .env
-    - Ard��ndan mevcut ��al��Yma dizini ve ebeveynlerini dola�Y��r (find_dotenv)
+    .env dosyasını script ile aynı klasörden otomatik yükler, eksikleri doğrular.
+    - Önce script klasöründeki .env
+    - Ardından mevcut çalışma dizini ve ebeveynlerini dolaşır (find_dotenv).
     """
     script_dir = Path(__file__).resolve().parent
     manual_candidates = [script_dir / ".env", Path.cwd() / ".env"]
 
-    # Uniq ve s��ral�� liste
-    seen = set()
+    seen: set[Path] = set()
     candidates: list[Path] = []
     for c in manual_candidates:
         if c not in seen:
@@ -115,7 +113,6 @@ def load_env() -> Tuple[str, str]:
             dotenv_path = candidate
             break
 
-    # find_dotenv ile yukar�� do�Yru tarama (��r. OneDrive alt klas��rǬnde ��al��Y��rken)
     if not dotenv_path:
         try:
             from dotenv import find_dotenv
@@ -131,38 +128,59 @@ def load_env() -> Tuple[str, str]:
 
     if dotenv_path:
         load_dotenv(dotenv_path=dotenv_path)
-        logging.info("ENV yǬklendi: %s", dotenv_path)
+        logging.info("ENV yüklendi: %s", dotenv_path)
     else:
-        logging.warning(".env bulunamad��. �?u yollar denendi: %s", " | ".join(str(p) for p in candidates))
-        load_dotenv()  # yoksay��labilir, default davran��Y
+        logging.warning(".env bulunamadı. Şu yollar denendi: %s", " | ".join(str(p) for p in candidates))
+        load_dotenv()
 
     token = os.getenv("TELEGRAM_TOKEN", "").strip()
     chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
 
-    missing_vars = []
+    missing_vars: list[str] = []
     if not token:
         missing_vars.append("TELEGRAM_TOKEN")
     if not chat_id:
         missing_vars.append("TELEGRAM_CHAT_ID")
+
     if missing_vars:
         raise RuntimeError(
-            "Eksik ortam de�Yi�Ykenleri: "
+            "Eksik ortam değişkenleri: "
             + ", ".join(missing_vars)
-            + ". .env dosyas��n��n script ile ayn�� klas��rde oldu�Yundan ve de�Yerlerin tan��ml�� oldu�Yundan emin olun."
+            + ". .env dosyasının script ile aynı klasörde olduğundan ve değerlerin tanımlı olduğundan emin olun."
         )
     return token, chat_id
 
 
-def normalize_ogun(value: str) -> str:
-    safe = (value or "").lower()
-    return (
-        safe.replace("�Y", "g")
-        .replace("��", "i")
-        .replace("�Y", "s")
-        .replace("��", "o")
-        .replace("��", "c")
-        .replace("Ǭ", "u")
+# -----------------------------
+# NORMALİZASYON & YARDIMCI FONKSİYONLAR
+# -----------------------------
+def _turkish_to_ascii(text: str) -> str:
+    mapping = str.maketrans(
+        {
+            "ç": "c",
+            "ğ": "g",
+            "ı": "i",
+            "ö": "o",
+            "ş": "s",
+            "ü": "u",
+        }
     )
+    text = text.translate(mapping)
+    # varsa kalan accent'leri de kaldır
+    text = unicodedata.normalize("NFKD", text)
+    return "".join(ch for ch in text if not unicodedata.combining(ch))
+
+
+def normalize_ogun(value: str) -> str:
+    safe = (value or "").lower().strip()
+    safe = _turkish_to_ascii(safe)
+    return safe.replace(" ", "")  # "öğle" -> "ogle", "akşam" -> "aksam"
+
+
+def normalize_text_for_search(value: str) -> str:
+    safe = (value or "").lower()
+    safe = _turkish_to_ascii(safe)
+    return safe.strip()
 
 
 def load_csv(path: Path) -> pd.DataFrame:
@@ -178,17 +196,19 @@ def load_sources() -> Dict[str, pd.DataFrame]:
     for cfg in DATASETS:
         existing_paths = [p for p in cfg["paths"] if p.exists()]
         if not existing_paths:
-            logging.warning("Dosya bulunamad��: %s", " | ".join(str(p) for p in cfg["paths"]))
+            logging.warning("Dosya bulunamadı: %s", " | ".join(str(p) for p in cfg["paths"]))
             continue
+
         frames: list[pd.DataFrame] = []
         for path in existing_paths:
             df = load_csv(path)
             frames.append(df)
-            logging.info("YǬklendi: %s (%d sat��r)", path, len(df))
+            logging.info("Yüklendi: %s (%d satır)", path, len(df))
 
         merged = pd.concat(frames, ignore_index=True) if len(frames) > 1 else frames[0]
-        merged = merged.drop_duplicates(subset=["tarih", "ogun", "yemekler"], keep="first").sort_values(
-            ["tarih", "ogun"]
+        merged = (
+            merged.drop_duplicates(subset=["tarih", "ogun", "yemekler"], keep="first")
+            .sort_values(["tarih", "ogun"])
         )
         sources[cfg["name"]] = merged
     return sources
@@ -204,7 +224,7 @@ def resolve_day_name(target_date: date, day_value: str | None = None) -> str:
 def format_dataset_block(name: str, df: pd.DataFrame, target_date: date) -> Tuple[str, Optional[str]]:
     day_df = df[df["tarih"] == target_date]
     if day_df.empty:
-        return f"{name}: veri bulunamad��.", None
+        return f"{name}: veri bulunamadı.", None
 
     day_name = resolve_day_name(target_date, str(day_df.iloc[0].get("gun", "")))
     ordered = (
@@ -234,17 +254,18 @@ def format_dataset_block(name: str, df: pd.DataFrame, target_date: date) -> Tupl
 def build_message(target_date: date) -> str:
     sources = load_sources()
     if not sources:
-        return "Hi�� veri yǬklenemedi; CSV dosyalar��n�� kontrol edin."
+        return "Hiç veri yüklenemedi; CSV dosyalarını kontrol edin."
 
     header_day: Optional[str] = None
     blocks: list[str] = []
     for name, df in sources.items():
         block, day_name = format_dataset_block(name, df, target_date)
-        header_day = header_day or day_name
+        if day_name and not header_day:
+            header_day = day_name
         blocks.append(block)
 
     day_text = resolve_day_name(target_date, header_day)
-    header = f"{target_date:%Y-%m-%d} ({day_text}) menǬsǬ"
+    header = f"{target_date:%Y-%m-%d} ({day_text}) menüsü"
     return f"{header}\n\n" + "\n\n".join(blocks)
 
 
@@ -257,22 +278,6 @@ def parse_user_date_arg(raw_date: str) -> Optional[date]:
     except Exception:
         return None
     return parsed.date()
-
-
-def normalize_text_for_search(value: str) -> str:
-    transliterated = (
-        unicodedata.normalize("NFKD", (value or "").lower())
-        .replace("��", "c")
-        .replace("�Y", "g")
-        .replace("��", "i")
-        .replace("��", "o")
-        .replace("�Y", "s")
-        .replace("Ǭ", "u")
-        .replace("ǽ", "a")
-        .replace("ǩ", "i")
-        .replace("ǯ", "u")
-    )
-    return transliterated.strip()
 
 
 def is_generic_query(query: str) -> bool:
@@ -311,22 +316,25 @@ def search_meals_by_query(
     return results
 
 
+# -----------------------------
+# TELEGRAM KOMUTLARI
+# -----------------------------
 async def send_menu(application: Application, chat_id: str, target_date: date) -> None:
     try:
         message = build_message(target_date)
     except Exception as exc:
-        logging.exception("Mesaj olu�Yturulamad��: %s", exc)
-        message = "MenǬ olu�Yturulurken bir hata olu�Ytu."
+        logging.exception("Mesaj oluşturulamadı: %s", exc)
+        message = "Menü oluşturulurken bir hata oluştu."
     await application.bot.send_message(chat_id=chat_id, text=message)
-    logging.info("G��nderildi -> %s (%s)", chat_id, target_date.isoformat())
+    logging.info("Gönderildi -> %s (%s)", chat_id, target_date.isoformat())
 
 
 async def cmd_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     today = datetime.now(IST).date()
     lines = [
-        "Merhaba! /menu veya /bugun ile bugǬnǬn menǬsǬnǬ, /yarin ile yar��n��n menǬsǬnǬ alabilirsin.",
-        "GǬnlǬk otomatik g��nderim a����k.",
-        f"BugǬnǬn menǬsǬnǬ istersen /bugun: {today:%Y-%m-%d}",
+        "Merhaba! /menu veya /bugun ile bugünün menüsünü, /yarin ile yarının menüsünü alabilirsin.",
+        "Günlük otomatik gönderim açık.",
+        f"Bugünün menüsünü istersen /bugun: {today:%Y-%m-%d}",
     ]
     await update.message.reply_text("\n".join(lines))
 
@@ -353,7 +361,7 @@ async def cmd_tarih(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     date_arg = " ".join(context.args) if context.args else ""
     target_date = parse_user_date_arg(date_arg)
     if not target_date:
-        await update.message.reply_text("LǬtfen tarihi GG/AA/YYYY bi��iminde gir: �-rne�Yin /tarih 02/11/2025")
+        await update.message.reply_text("Lütfen tarihi GG/AA/YYYY biçiminde gir: Örneğin /tarih 02/11/2025")
         return
 
     await send_menu(context.application, str(update.effective_chat.id), target_date)
@@ -364,17 +372,17 @@ async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     if not context.args:
-        await update.message.reply_text("LǬtfen aramak istedi�Yiniz yeme�Yi yaz��n. �-rnek: /ara Trile��e")
+        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
         return
 
     raw_query = " ".join(context.args).strip()
     if not raw_query:
-        await update.message.reply_text("LǬtfen aramak istedi�Yiniz yeme�Yi yaz��n. �-rnek: /ara Trile��e")
+        await update.message.reply_text("Lütfen aramak istediğiniz yemeği yazın. Örnek: /ara Trileçe")
         return
 
     if is_generic_query(raw_query):
         await update.message.reply_text(
-            "LǬtfen daha spesifik bir yemek ad�� girin. �-rne�Yin: Trile��e, Et D��ner, Hamburger gibi."
+            "Lütfen daha spesifik bir yemek adı girin. Örneğin: Trileçe, Et Döner, Hamburger gibi."
         )
         return
 
@@ -382,15 +390,15 @@ async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     now = datetime.now(IST)
     sources = load_sources()
     if not sources:
-        await update.message.reply_text("Hi�� veri yǬklenemedi; CSV dosyalar��n�� kontrol edin.")
+        await update.message.reply_text("Hiç veri yüklenemedi; CSV dosyalarını kontrol edin.")
         return
 
     matches = search_meals_by_query(normalized_query, sources, now)
     if not any(matches.values()):
-        await update.message.reply_text(f'"{raw_query}" bu ay��n menǬlerinde bulunamad��.')
+        await update.message.reply_text(f'"{raw_query}" bu ayın menülerinde bulunamadı.')
         return
 
-    lines = [f'"{raw_query}" i��in sonu��lar:']
+    lines = [f'"{raw_query}" için sonuçlar:']
     dataset_order = [cfg["name"] for cfg in DATASETS]
     for dataset_name in dataset_order:
         entries = matches.get(dataset_name)
@@ -403,6 +411,9 @@ async def cmd_ara(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text("\n".join(lines))
 
 
+# -----------------------------
+# SCHEDULER KURULUMU
+# -----------------------------
 async def configure_scheduler(application: Application, chat_id: str) -> None:
     scheduler = AsyncIOScheduler(timezone=IST, event_loop=asyncio.get_running_loop())
 
@@ -413,7 +424,7 @@ async def configure_scheduler(application: Application, chat_id: str) -> None:
     def runner() -> None:
         application.create_task(daily_job())
 
-    trigger = CronTrigger(hour=8, minute=0, timezone=IST)  # 08:00'da g��nder
+    trigger = CronTrigger(hour=8, minute=0, timezone=IST)  # 08:00'da gönder
     try:
         scheduler.add_job(runner, trigger, id="daily_menu", replace_existing=True)
     except ConflictingIdError:
@@ -421,18 +432,21 @@ async def configure_scheduler(application: Application, chat_id: str) -> None:
 
     scheduler.start()
     application.bot_data["scheduler"] = scheduler
-    logging.info("GǬnlǬk g��nderim planland��: %s", trigger)
+    logging.info("Günlük gönderim planlandı: %s", trigger)
 
 
+# -----------------------------
+# MAIN
+# -----------------------------
 def main() -> None:
     logging.basicConfig(
         format="%(asctime)s - %(levelname)s - %(message)s",
         level=logging.INFO,
     )
 
-    logging.info("��al��Yma dizini: %s", Path.cwd().resolve())
+    logging.info("Çalışma dizini: %s", Path.cwd().resolve())
 
-    # 1) Flask keep-alive server'�� ba�Ylat
+    # 1) Flask keep-alive server'ı başlat
     start_flask_server()
 
     # 2) Telegram + scheduler kur
