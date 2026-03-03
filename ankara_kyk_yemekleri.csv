@@ -1,63 +1,32 @@
 tarih,gun,ogun,yemekler,kalem_sayisi,kaynak
-2026-03-01,Pazar,Kahvaltı,Şehriye Çorbası | Kaşarlı Omlet | Patates Kroket | Beyaz Peynir | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,6,https://kykyemek.com/
-2026-03-01,Pazar,Akşam,Mercimek Çorbası | Etli Kuru Fasulye / Mevsim Türlü | Tereyağlı Şehriyeli Pirinç Pilavı | Portakallı Revani | Yoğurt,5,https://kykyemek.com/
-2026-03-02,Pazartesi,Kahvaltı,Yayla Çorbası | Patates Kızartması | Haşlanmış Yumurta | Yöresel Peynir | Siyah / Yeşil Zeytin | Reçel Çeşitleri,6,https://kykyemek.com/
-2026-03-02,Pazartesi,Akşam,Tarhana Çorba | Izgara Köfte+Köz Sebze / Karnabahar Pane | Salçalı Makarna | Haydari,4,https://kykyemek.com/
-2026-03-03,Salı,Kahvaltı,Ezogelin Çorba | Peynirli Omlet | Çikolatalı Milföy Börek | Kaşar Peyniri | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-03,Salı,Akşam,Yayla Çorbası | Tavuk Şiş+Lavaş+Yeşil Salata / Mantar Sote | Tereyağlı Mercimekli Bulgur Pilavı | Trileçe,4,https://kykyemek.com/
-2026-03-04,Çarşamba,Kahvaltı,Mercimek Çorbası | Zeytinli / Peynirli Açma | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Bal+Tereyağ,6,https://kykyemek.com/
-2026-03-04,Çarşamba,Akşam,Şehriye Çorbası | Etli Çökertme Kebabı / Bezelye Yemeği | Tereyağlı Pirinç Pilavı | Mevsim Salata,4,https://kykyemek.com/
-2026-03-05,Perşembe,Kahvaltı,Domates Çorba | Sade Omlet | Dere Otlu Poğaça | Yöresel Peynir | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,6,https://kykyemek.com/
-2026-03-05,Perşembe,Akşam,Mercimek Çorbası | Köri Soslu Tavuk+Patates Kızartması / Karışık Dolma + Yoğurt | Penne Napoliten | Portakal,4,https://kykyemek.com/
-2026-03-06,Cuma,Kahvaltı,Tarhana Çorba | Sosis Kokteyl(Salçalı veya Kızartma) | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Helva,6,https://kykyemek.com/
-2026-03-06,Cuma,Akşam,Krutonlu Domates Çorba | İzmir Köfte / Taze Fasulye Yemeği | Tereyağlı Nohutlu Pirinç Pilavı | Cevizli Baklava / Kadayıf,4,https://kykyemek.com/
-2026-03-07,Cumartesi,Kahvaltı,Şehriye Çorbası | Sucuklu Yumurta | Simit | Kaşar Peyniri | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-07,Cumartesi,Akşam,Ezogelin Çorba | Tavuk Şinitzel+Elma Dilim Patates+Soğan Halkası / Kaşarlı Sebze Graten | Salçalı Makarna | Mercimek Köftesi+Marul,4,https://kykyemek.com/
-2026-03-08,Pazar,Kahvaltı,Yayla Çorbası | Patates Kızartması | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Reçel Çeşitleri,6,https://kykyemek.com/
-2026-03-08,Pazar,Akşam,Tarhana Çorba | Çiftlik Kebabı / İmam Bayıldı | Tereyağlı Şehriyeli Pirinç Pilavı | Cacık,4,https://kykyemek.com/
-2026-03-09,Pazartesi,Kahvaltı,Domates Çorba | Kaşarlı Omlet | Zeytinli / Peynirli Açma | Yöresel Peynir | Siyah / Yeşil Zeytin | Bal+Tereyağ,6,https://kykyemek.com/
-2026-03-09,Pazartesi,Akşam,Mercimek Çorbası | Tavuk Külbastı+Patates Püresi / Ispanak Kavurma+Yoğurt | Spagetti Napoliten | Kalburabastı,4,https://kykyemek.com/
-2026-03-10,Salı,Kahvaltı,Tarhana Çorba | Karışık Pizza | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-10,Salı,Akşam,"Erişteli Yeşil Mercimek Çorbası | Hamburger(80-100 Gr Hamburger Ekmeği İçerisinde Domates, Marul, Kornişon Turşu İle) / Halep Dolma | Patates Kızartması | Ayran",4,https://kykyemek.com/
-2026-03-11,Çarşamba,Kahvaltı,Yayla Çorbası | Patatesli Yumurta | Simit | Kaşar Peyniri | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,6,https://kykyemek.com/
-2026-03-11,Çarşamba,Akşam,Domates Çorba | Kaşarlı Tavuk Graten / Mücver+Yoğurt | Salçalı Makarna | Mısırlı Havuçlu Aysberg Salata,4,https://kykyemek.com/
-2026-03-12,Perşembe,Kahvaltı,Mercimek Çorbası | Peynirli Börek | Haşlanmış Yumurta | Yöresel Peynir | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-12,Perşembe,Akşam,Şehriye Çorbası | Macar Gulaş / Soslu Karışık Kızartma | Tereyağlı Pirinç Pilavı | Pembe Sultan,4,https://kykyemek.com/
-2026-03-13,Cuma,Kahvaltı,Domates Çorba | Sucuklu Yumurta | Sade Poğaça | Beyaz Peynir | Siyah / Yeşil Zeytin | Reçel Çeşitleri,6,https://kykyemek.com/
-2026-03-13,Cuma,Akşam,Ezogelin Çorba | Çıtır Tavuk+Patates Kızartması+Soğan Halkası / Pırasa Yemeği | Fırın Makarna | Hoşaf-Komposto,4,https://kykyemek.com/
-2026-03-14,Cumartesi,Kahvaltı,Şehriye Çorbası | Patates Kızartması | Haşlanmış Yumurta | Kaşar Peyniri | Siyah / Yeşil Zeytin | Tahinli Pekmez,6,https://kykyemek.com/
-2026-03-14,Cumartesi,Akşam,Tarhana Çorba | Etsiz Nohut Yemeği / Taze Fasulye Yemeği | Tereyağlı Şehriyeli Pirinç Pilavı | Çikolatalı Yaş Pasta,4,https://kykyemek.com/
-2026-03-15,Pazar,Kahvaltı,Ezogelin Çorba | Menemen | Simit | Beyaz Peynir | Siyah / Yeşil Zeytin | Muz,6,https://kykyemek.com/
-2026-03-15,Pazar,Akşam,Mercimek Çorbası | Tavuk Izgara+Sebze Sote / Karnabahar Pane+Yoğurt | Garnitürlü Arpa Şehriye Pilavı | Ezme,4,https://kykyemek.com/
-2026-03-16,Pazartesi,Kahvaltı,Tarhana Çorba | Pişi | Haşlanmış Yumurta | Kaşar Peyniri | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,6,https://kykyemek.com/
-2026-03-16,Pazartesi,Akşam,Yayla Çorbası | Çoban Kavurma+Küp Patates / Mevsim Türlü | Tereyağlı Bulgur Pilavı | Cevizli Baklava / Kadayıf,4,https://kykyemek.com/
-2026-03-17,Salı,Kahvaltı,Mercimek Çorbası | Peynirli Omlet | Çikolatalı Milföy Börek | Yöresel Peynir | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-17,Salı,Akşam,"Domates Çorba | Haşlanmış Tavuk Fileto(Didilmiş)+Kornişon Turşu, Havuç, Mor Lahana / İmam Bayıldı | Tereyağlı Nohutlu Pirinç Pilavı | Ayran",4,https://kykyemek.com/
-2026-03-18,Çarşamba,Kahvaltı,Yayla Çorbası | Patates Kızartması | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Reçel Çeşitleri,6,https://kykyemek.com/
-2026-03-18,Çarşamba,Akşam,Ezogelin Çorba | İnegöl Köfte+Piyaz / Lahana Sarma | Salçalı Makarna | Yoğurtlu Köz Biberli Mısırlı Kornişonlu Salata,4,https://kykyemek.com/
-2026-03-19,Perşembe,Kahvaltı,Domates Çorba | Sade Omlet | Dere Otlu Poğaça | Kaşar Peyniri | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,6,https://kykyemek.com/
-2026-03-19,Perşembe,Akşam,Tarhana Çorba | Tavuklu Kağıt Kebabı / Patates Köftesi+Yoğurt | Tereyağlı Pirinç Pilavı | Portakal | Mevsim Salata,5,https://kykyemek.com/
-2026-03-20,Cuma,Kahvaltı,Zeytinli / Peynirli Açma | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Bal+Tereyağ,5,https://kykyemek.com/
-2026-03-20,Cuma,Akşam,Mercimek Çorbası / Kremalı Mantar Çorba | Et Tantuni+Lavaş+Sumaklı Soğan Salatası / Kaşarlı Ispanak Graten | Salçalı Bulgur Pilavı | Muzlu Magnolia,4,https://kykyemek.com/
-2026-03-21,Cumartesi,Kahvaltı,Patatesli Yumurta | Simit | Yöresel Peynir | Siyah / Yeşil Zeytin | Tahinli Pekmez,5,https://kykyemek.com/
-2026-03-21,Cumartesi,Akşam,Şehriye Çorbası / Toyga Çorba | Tavuk Çökertme / Karışık Dolma | Tereyağlı Erişte | Havuç Tarator,4,https://kykyemek.com/
-2026-03-22,Pazar,Kahvaltı,Karışık Kızartma | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,5,https://kykyemek.com/
-2026-03-22,Pazar,Akşam,Ezogelin Çorba / Mısır Çorba | Kıymalı Patates Oturtma / Bezelye Yemeği | Tereyağlı Şehriyeli Pirinç Pilavı | Mevsim Salata,4,https://kykyemek.com/
-2026-03-23,Pazartesi,Kahvaltı,Sucuklu Yumurta | Peynirli Milföy Böreği | Kaşar Peyniri | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,5,https://kykyemek.com/
-2026-03-23,Pazartesi,Akşam,Domates Çorba / Havuç Çorba | Tavuk Şiş+Köz Sebzeler / Mantar Sote | Spagetti Napoliten | Cacık,4,https://kykyemek.com/
-2026-03-24,Salı,Kahvaltı,Patates Kızartması | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Reçel Çeşitleri,5,https://kykyemek.com/
-2026-03-24,Salı,Akşam,Tarhana Çorba / Tutmaç Çorba | Terbiyeli Et Haşlama Yemeği / Taze Fasulye Yemeği | Tereyağlı Şehriyeli Pirinç Pilavı | Babagannuş,4,https://kykyemek.com/
-2026-03-25,Çarşamba,Kahvaltı,Kaşarlı Omlet | Sade Poğaça | Krem Peynir | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,5,https://kykyemek.com/
-2026-03-25,Çarşamba,Akşam,Şehriye Çorbası / Yayla Çorbası | Kuşbaşılı Tavuklu Tepsi Kebabı / Mücver+Yoğurt | Salçalı Bulgur Pilavı | Yeşil Salata,4,https://kykyemek.com/
-2026-03-26,Perşembe,Kahvaltı,Karışık Pizza | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,5,https://kykyemek.com/
-2026-03-26,Perşembe,Akşam,Mercimek Çorbası / Köz Biber Çorba | Kadınbudu Köfte+Patates Püresi / Pırasa Yemeği | Salçalı Makarna | Ayran,4,https://kykyemek.com/
-2026-03-27,Cuma,Kahvaltı,Peynirli Omlet | Simit | Kaşar Peyniri | Siyah / Yeşil Zeytin | Tahinli Pekmez,5,https://kykyemek.com/
-2026-03-27,Cuma,Akşam,Domates Çorba / Terbiyeli Anadolu Çorba | Tavuk Şinitzel+Elma Dilim Patates+Soğan Halkası / Kabak Kalye | Yoğurtlu Soslu Mantı | Çiğ Köfte+Marul,4,https://kykyemek.com/
-2026-03-28,Cumartesi,Kahvaltı,Sosisli Patates Kızartması | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Elma,5,https://kykyemek.com/
-2026-03-28,Cumartesi,Akşam,Tarhana Çorba / Etli Düğün Çorbası | Etsiz Kuru Fasulye / Şakşuka | Tereyağlı Pirinç Pilavı | Tahinli Kemalpaşa,4,https://kykyemek.com/
-2026-03-29,Pazar,Kahvaltı,Sade Omlet | Mozaik Kek | Yöresel Peynir | Siyah / Yeşil Zeytin | Bal+Tereyağ,5,https://kykyemek.com/
-2026-03-29,Pazar,Akşam,Ezogelin Çorba / Kremalı Sebze Çorbası | Püreli Kebap / Halep Dolma+Yoğurt | Beyaz Peynirli Makarna | Mevsim Salata,4,https://kykyemek.com/
-2026-03-30,Pazartesi,Kahvaltı,Peynirli Börek | Haşlanmış Yumurta | Beyaz Peynir | Siyah / Yeşil Zeytin | Sürülebilir Çikolata,5,https://kykyemek.com/
-2026-03-30,Pazartesi,Akşam,"Şehriye Çorbası / Toyga Çorba | Çıtır Tavuk Burger(80-100 Gr Hamburger Ekmeği İçerisinde Domates, Marul, Kornişon Turşu İle) / Kaşarlı Karnabahar Graten | Patates Kızartması | Ayran",4,https://kykyemek.com/
-2026-03-31,Salı,Kahvaltı,Sucuklu Yumurta | Dere Otlu Poğaça | Labne Peynir | Siyah / Yeşil Zeytin | Mevsim Sebzeleri Söğüş,5,https://kykyemek.com/
-2026-03-31,Salı,Akşam,Mercimek Çorbası / Kremalı Mantar Çorba | Sebzeli Köfte / Patlıcan Yemeği | Tereyağlı Pirinç Pilavı | Kuru Cacık,4,https://kykyemek.com/
+2026-03-01,Pazar,Öğle,MERCİMEK ÇORBASI | ETLİ KURU FASULYE / MEVSİM TÜRLÜ | TEREYAĞLI ŞEHRİYELİ PİRİNÇ PİLAVI | PORTAKALLI REVANİ,4,Ankara Üniversitesi Yemek Listesi
+2026-03-02,Pazartesi,Öğle,TARHANA ÇORBA | IZGARA KÖFTE+KÖZ SEBZE / KARNABAHAR PANE | SALÇALI MAKARNA | HAYDARİ,4,Ankara Üniversitesi Yemek Listesi
+2026-03-03,Salı,Öğle,YAYLA ÇORBASI | TAVUK ŞİŞ+LAVAŞ+YEŞİL SALATA / MANTAR SOTE | TEREYAĞLI MERCİMEKLİ BULGUR PİLAVI | TRİLEÇE,4,Ankara Üniversitesi Yemek Listesi
+2026-03-04,Çarşamba,Öğle,ŞEHRİYE ÇORBASI | ETLİ ÇÖKERTME KEBABI / BEZELYE YEMEĞİ | TEREYAĞLI PİRİNÇ PİLAVI | MEVSİM SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-05,Perşembe,Öğle,MERCİMEK ÇORBASI | KÖRİ SOSLU TAVUK+PATATES KIZARTMASI / KARIŞIK DOLMA + YOĞURT | PENNE NAPOLİTEN | PORTAKAL,4,Ankara Üniversitesi Yemek Listesi
+2026-03-06,Cuma,Öğle,KRUTONLU DOMATES ÇORBA | İZMİR KÖFTE / TAZE FASULYE YEMEĞİ | TEREYAĞLI NOHUTLU PİRİNÇ PİLAVI | CEVİZLİ BAKLAVA / KADAYIF,4,Ankara Üniversitesi Yemek Listesi
+2026-03-07,Cumartesi,Öğle,EZOGELİN ÇORBA | TAVUK ŞİNİTZEL+ELMA DİLİM PATATES+SOĞAN HALKASI / KAŞARLI SEBZE GRATEN | SALÇALI MAKARNA | MERCİMEK KÖFTESİ+MARUL,4,Ankara Üniversitesi Yemek Listesi
+2026-03-08,Pazar,Öğle,TARHANA ÇORBA | ÇİFTLİK KEBABI / İMAM BAYILDI | TEREYAĞLI ŞEHRİYELİ PİRİNÇ PİLAVI | CACIK,4,Ankara Üniversitesi Yemek Listesi
+2026-03-09,Pazartesi,Öğle,MERCİMEK ÇORBASI | TAVUK KÜLBASTI+PATATES PÜRESİ / ISPANAK KAVURMA+YOĞURT | SPAGETTİ NAPOLİTEN | KALBURABASTI,4,Ankara Üniversitesi Yemek Listesi
+2026-03-10,Salı,Öğle,"ERİŞTELİ YEŞİL MERCİMEK ÇORBASI | HAMBURGER(80-100 GR HAMBURGER EKMEĞİ İÇERİSİNDE DOMATES, MARUL, KORNİŞON TURŞU İLE) / HALEP DOLMA | PATATES KIZARTMASI | AYRAN",4,Ankara Üniversitesi Yemek Listesi
+2026-03-11,Çarşamba,Öğle,DOMATES ÇORBA | KAŞARLI TAVUK GRATEN / MÜCVER+YOĞURT | SALÇALI MAKARNA | MISIRLI HAVUÇLU AYSBERG SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-12,Perşembe,Öğle,ŞEHRİYE ÇORBASI | MACAR GULAŞ / SOSLU KARIŞIK KIZARTMA | TEREYAĞLI PİRİNÇ PİLAVI | PEMBE SULTAN,4,Ankara Üniversitesi Yemek Listesi
+2026-03-13,Cuma,Öğle,EZOGELİN ÇORBA | ÇITIR TAVUK+PATATES KIZARTMASI+SOĞAN HALKASI / PIRASA YEMEĞİ | FIRIN MAKARNA | HOŞAF-KOMPOSTO,4,Ankara Üniversitesi Yemek Listesi
+2026-03-14,Cumartesi,Öğle,TARHANA ÇORBA | ETSİZ NOHUT YEMEĞİ / TAZE FASULYE YEMEĞİ | TEREYAĞLI ŞEHRİYELİ PİRİNÇ PİLAVI | ÇİKOLATALI YAŞ PASTA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-15,Pazar,Öğle,MERCİMEK ÇORBASI | TAVUK IZGARA+SEBZE SOTE / KARNABAHAR PANE+YOĞURT | GARNİTÜRLÜ ARPA ŞEHRİYE PİLAVI | EZME,4,Ankara Üniversitesi Yemek Listesi
+2026-03-16,Pazartesi,Öğle,YAYLA ÇORBASI | ÇOBAN KAVURMA+KÜP PATATES / MEVSİM TÜRLÜ | TEREYAĞLI BULGUR PİLAVI | CEVİZLİ BAKLAVA / KADAYIF,4,Ankara Üniversitesi Yemek Listesi
+2026-03-17,Salı,Öğle,"DOMATES ÇORBA | HAŞLANMIŞ TAVUK FİLETO(DİDİLMİŞ)+KORNİŞON TURŞU, HAVUÇ, MOR LAHANA / İMAM BAYILDI | TEREYAĞLI NOHUTLU PİRİNÇ PİLAVI | AYRAN",4,Ankara Üniversitesi Yemek Listesi
+2026-03-18,Çarşamba,Öğle,EZOGELİN ÇORBA | İNEGÖL KÖFTE+PİYAZ / LAHANA SARMA | SALÇALI MAKARNA | YOĞURTLU KÖZ BİBERLİ MISIRLI KORNİŞONLU SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-19,Perşembe,Öğle,TARHANA ÇORBA | TAVUKLU KAĞIT KEBABI / PATATES KÖFTESİ+YOĞURT | TEREYAĞLI PİRİNÇ PİLAVI | PORTAKAL,4,Ankara Üniversitesi Yemek Listesi
+2026-03-20,Cuma,Öğle,MERCİMEK ÇORBASI / KREMALI MANTAR ÇORBA | ET TANTUNİ+LAVAŞ+SUMAKLI SOĞAN SALATASI / KAŞARLI ISPANAK GRATEN | SALÇALI BULGUR PİLAVI | MUZLU MAGNOLİA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-21,Cumartesi,Öğle,ŞEHRİYE ÇORBASI / TOYGA ÇORBA | TAVUK ÇÖKERTME / KARIŞIK DOLMA | TEREYAĞLI ERİŞTE | HAVUÇ TARATOR,4,Ankara Üniversitesi Yemek Listesi
+2026-03-22,Pazar,Öğle,EZOGELİN ÇORBA / MISIR ÇORBA | KIYMALI PATATES OTURTMA / BEZELYE YEMEĞİ | TEREYAĞLI ŞEHRİYELİ PİRİNÇ PİLAVI | MEVSİM SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-23,Pazartesi,Öğle,DOMATES ÇORBA / HAVUÇ ÇORBA | TAVUK ŞİŞ+KÖZ SEBZELER / MANTAR SOTE | SPAGETTİ NAPOLİTEN | CACIK,4,Ankara Üniversitesi Yemek Listesi
+2026-03-24,Salı,Öğle,TARHANA ÇORBA / TUTMAÇ ÇORBA | TERBİYELİ ET HAŞLAMA YEMEĞİ / TAZE FASULYE YEMEĞİ | TEREYAĞLI ŞEHRİYELİ PİRİNÇ PİLAVI | BABAGANNUŞ,4,Ankara Üniversitesi Yemek Listesi
+2026-03-25,Çarşamba,Öğle,ŞEHRİYE ÇORBASI / YAYLA ÇORBASI | KUŞBAŞILI TAVUKLU TEPSİ KEBABI / MÜCVER+YOĞURT | SALÇALI BULGUR PİLAVI | YEŞİL SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-26,Perşembe,Öğle,MERCİMEK ÇORBASI / KÖZ BİBER ÇORBA | KADINBUDU KÖFTE+PATATES PÜRESİ / PIRASA YEMEĞİ | SALÇALI MAKARNA | AYRAN,4,Ankara Üniversitesi Yemek Listesi
+2026-03-27,Cuma,Öğle,DOMATES ÇORBA / TERBİYELİ ANADOLU ÇORBA | TAVUK ŞİNİTZEL+ELMA DİLİM PATATES+SOĞAN HALKASI / KABAK KALYE | YOĞURTLU SOSLU MANTI | ÇİĞ KÖFTE+MARUL,4,Ankara Üniversitesi Yemek Listesi
+2026-03-28,Cumartesi,Öğle,TARHANA ÇORBA / ETLİ DÜĞÜN ÇORBASI | ETSİZ KURU FASULYE / ŞAKŞUKA | TEREYAĞLI PİRİNÇ PİLAVI | TAHİNLİ KEMALPAŞA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-29,Pazar,Öğle,EZOGELİN ÇORBA / KREMALI SEBZE ÇORBASI | PÜRELİ KEBAP / HALEP DOLMA+YOĞURT | BEYAZ PEYNİRLİ MAKARNA | MEVSİM SALATA,4,Ankara Üniversitesi Yemek Listesi
+2026-03-30,Pazartesi,Öğle,"ŞEHRİYE ÇORBASI / TOYGA ÇORBA | ÇITIR TAVUK BURGER(80-100 GR HAMBURGER EKMEĞİ İÇERİSİNDE DOMATES, MARUL, KORNİŞON TURŞU İLE) / KAŞARLI KARNABAHAR GRATEN | PATATES KIZARTMASI | AYRAN",4,Ankara Üniversitesi Yemek Listesi
+2026-03-31,Salı,Öğle,MERCİMEK ÇORBASI / KREMALI MANTAR ÇORBA | SEBZELİ KÖFTE / PATLICAN YEMEĞİ | TEREYAĞLI PİRİNÇ PİLAVI | KURU CACIK,4,Ankara Üniversitesi Yemek Listesi
